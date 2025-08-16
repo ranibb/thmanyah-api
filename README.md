@@ -1,98 +1,124 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Thmanyah Backend - Podcast Search API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is the backend API implementation for the Thmanyah Full-Stack Developer Assignment. Its primary purpose is to provide a REST API endpoint that searches for podcasts using the iTunes Search API, caches the results in an AWS DynamoDB table, and returns them to the client.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+### 🚀 **Live Demo & Repositories**
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+*   **Live Frontend Application:** **[https://thmanyah-frontend-wheat.vercel.app/](https://thmanyah-frontend-wheat.vercel.app/)**
+*   **Backend Repository (This Repo):** **[ranibb/thmanyah-api](https://github.com/ranibb/thmanyah-api)**
+*   **Frontend Repository:** **[ranibb/thmanyah-frontend](https://github.com/ranibb/thmanyah-frontend)**
 
-## Project setup
+---
 
-```bash
-$ npm install
+### ✨ Features & API Endpoint
+
+The application exposes a single, robust API endpoint for searching podcasts.
+
+#### **Endpoint**
+
+`GET /search`
+
+#### **Request Parameter**
+
+*   `term` (string, required): The search term to query for podcasts.
+    *   **Example:** `/search?term=فنجان`
+
+#### **Workflow**
+
+1.  The endpoint receives the search `term` as an input.
+2.  It makes a live API call to the official iTunes Search API.
+3.  The podcast results are then saved (cached) into an AWS DynamoDB table.
+4.  The list of podcasts is returned to the client as a JSON response.
+
+#### **Sample Response**
+```json
+[
+    {
+        "collectionId": 985515827,
+        "artistName": "ثمانية/ thmanyah",
+        "collectionName": "فنجان مع عبدالرحمن أبومالح",
+        "feedUrl": "https://files.hosting.thmanyah.com/podcasts/89/...",
+        "artworkUrl600": "https://is1-ssl.mzstatic.com/.../600x600bb.jpg",
+        "genres": ["Society & Culture", "Podcasts"],
+        "releaseDate": "2025-06-08T03:00:00Z",
+        "trackCount": 350
+    },
+    ...
+]
 ```
 
-## Compile and run the project
+---
 
+### 💻 Technology Stack
+
+| Category      | Technology                                                                                                    |
+|---------------|---------------------------------------------------------------------------------------------------------------|
+| **Framework** | **NestJS** (with TypeScript)                                                                                  |
+| **Database**  | **AWS DynamoDB** (NoSQL)                                                                                      |
+| **Deployment**| **AWS Elastic Beanstalk**                                                                                     |
+| **Core Tools**| **Axios** (for HTTP requests), **AWS SDK v3**, **`@nestjs/config`** (for environment variables)                 |
+
+---
+
+### 🛠️ Getting Started: Running Locally
+
+To run this project on your local machine, follow these steps.
+
+#### **1. Clone the Repository**
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/ranibb/thmanyah-api.git
+cd thmanyah-api
 ```
 
-## Run tests
-
+#### **2. Install Dependencies**
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
+#### **3. Set Up Environment Variables**
+Create a `.env` file in the root of the project. This file is required for the application to run. Copy the contents of `.env.example` (if present) or use the template below.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+**`.env` file contents:**
+```
+# The port for the local development server
+PORT=3001
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+# The base URL for the external API
+ITUNES_API_BASE_URL=https://itunes.apple.com
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Your AWS credentials for connecting to DynamoDB
+# Ensure the user has DynamoDB read/write permissions
+AWS_REGION=your-aws-region
+AWS_ACCESS_KEY_ID=your-access-key-id
+AWS_SECRET_ACCESS_KEY=your-secret-access-key
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+#### **4. Run the Development Server**
+```bash
+npm run start:dev
+```
+The backend API should now be running on the port you specified (e.g., `http://localhost:3001`).
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+### ☁️ Deployment
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+This application is designed for and deployed on **AWS Elastic Beanstalk**.
 
-## Support
+The deployment process involves:
+1.  Initializing an Elastic Beanstalk environment using the **EB CLI**.
+2.  Creating a production-ready build of the NestJS application.
+3.  Configuring the production environment variables (`PORT`, `AWS_REGION`, `AWS_ACCESS_KEY_ID`, etc.) directly in the Elastic Beanstalk console for security.
+4.  Ensuring the associated IAM user has the necessary permissions for **Elastic Beanstalk**, **S3**, and **DynamoDB**.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+### 🏗️ Project Structure
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+The project follows a modular architecture to separate concerns:
+*   `src/search/`: Contains the controller and service for the main `/search` endpoint.
+*   `src/itunes/`: Contains the service responsible for communicating with the external iTunes API.
+*   `src/database/`: Contains the service for interacting with the AWS DynamoDB table.
+*   `src/common/`: Contains shared DTOs (Data Transfer Objects) to ensure type safety between modules.
